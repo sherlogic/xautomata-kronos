@@ -8,7 +8,7 @@ def read_file(filename):
 
 
 version = []
-with open("hive/version.py", "r") as f:
+with open("Kronos/version.py", "r") as f:
     for line in f:
         version.append(str(line.strip()))
 
