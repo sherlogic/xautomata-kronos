@@ -1,3 +1,7 @@
+<img src="Kronos.png"  width="100%">
+
+*Python integration with Xautomata API*
+
 # Kronos
 Classe per la gestione dei timestamp in modo chiaro e univoco. La classe forza l'uso delle timezone indipendentemente da come
 si crea l'oggetto temporale.
