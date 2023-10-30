@@ -1,6 +1,6 @@
 from datetime import datetime, date, timedelta, timezone
 from math import copysign
-from typing import Literal
+from typing import Literal, List
 
 
 class TimeZones:
@@ -275,7 +275,7 @@ class Core:
         return cls(datetime.strptime(string, format), tz=tz)
 
     @classmethod
-    def from_list_iso_to_datetime(cls, list_iso: list[str], tz=TimeZones.rome):
+    def from_list_iso_to_datetime(cls, list_iso: List[str], tz=TimeZones.rome):
         """
         convert a list of string with isoformat into a list of datetime
         Args:
