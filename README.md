@@ -72,8 +72,22 @@ Esistono una serie di operazioni applicabili agli oggetti Kronos:
 - end_of
 - add_duration
 - subtract_duration
-- ==, >, >=, <, <=
+- ==, >, >=, <, <=, -
 - date, datetime, isoformat, iso, timestamp, ts
+
+Le operazioni ==, >, >=, <, <=, - permettono di confrontare date cross classi, permettendo di comparare stringhe in isoformat e datetime con Kronos, di seguito un esempio.
+```python
+import Kronos
+from datetime import date, datetime
+Kronos.now() > Kronos.from_iso("2022-01-01")
+>>> True
+Kronos.now() > datetime.fromisoformat("2022-01-01")
+>>> True
+Kronos.now() > date.fromisoformat("2022-01-01")
+>>> True
+Kronos.now() > "2022-01-01"
+>>> True
+```
 
 ### start_of, end_of
 Permettono di muovere il cursore temporale all'inizio o alla fine di una finestra scelta.

@@ -253,8 +253,8 @@ class sliders:
         """
         produce the start and end of a period based on the interval and offset
         """
-        start = self.add_duration(**{scale: -(interval+offset)})
-        stop = self.add_duration(**{scale: -offset})
+        start = self.subtract_duration(**{scale: interval+offset})
+        stop = self.subtract_duration(**{scale: offset})
         return start, stop
 
 def _sign(x):

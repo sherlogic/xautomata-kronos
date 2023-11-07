@@ -30,7 +30,12 @@ class Core(periods, converters, costructors):
 
     def __sub__(self, other):
         if self.td is None:
-            td = self.dt - other.dt
+            if isinstance(other, str):
+                td = self.dt - self.from_iso(other).dt
+            elif isinstance(other, datetime) or isinstance(other, date):
+                td = self.dt - self.from_datetime(other).dt
+            else:
+                td = self.dt - other.dt
             return self.__class__(td=td)
         else:
             td = self.td - other.td
@@ -38,7 +43,12 @@ class Core(periods, converters, costructors):
 
     def __add__(self, other):
         if self.td is None:
-            td = self.dt + other.dt
+            if isinstance(other, str):
+                td = self.dt + self.from_iso(other).dt
+            elif isinstance(other, datetime) or isinstance(other, date):
+                td = self.dt + self.from_datetime(other).dt
+            else:
+                td = self.dt + other.dt
             return self.__class__(td=td)
         else:
             td = self.td + other.td
@@ -46,31 +56,56 @@ class Core(periods, converters, costructors):
 
     def __eq__(self, other):
         if self.td is None:
-            return self.dt == other.dt
+            if isinstance(other, str):
+                return self.dt == self.from_iso(other).dt
+            elif isinstance(other, datetime) or isinstance(other, date):
+                return self.dt == self.from_datetime(other).dt
+            else:
+                return self.dt == other.dt
         else:
             return self.td == other.td
 
     def __le__(self, other):
         if self.td is None:
-            return self.dt <= other.dt
+            if isinstance(other, str):
+                return self.dt <= self.from_iso(other).dt
+            elif isinstance(other, datetime) or isinstance(other, date):
+                return self.dt <= self.from_datetime(other).dt
+            else:
+                return self.dt <= other.dt
         else:
             return self.td <= other.td
 
     def __lt__(self, other):
         if self.td is None:
-            return self.dt < other.dt
+            if isinstance(other, str):
+                return self.dt < self.from_iso(other).dt
+            elif isinstance(other, datetime) or isinstance(other, date):
+                return self.dt < self.from_datetime(other).dt
+            else:
+                return self.dt < other.dt
         else:
             return self.td < other.td
 
     def __ge__(self, other):
         if self.td is None:
-            return self.dt >= other.dt
+            if isinstance(other, str):
+                return self.dt >= self.from_iso(other).dt
+            elif isinstance(other, datetime) or isinstance(other, date):
+                return self.dt >= self.from_datetime(other).dt
+            else:
+                return self.dt >= other.dt
         else:
-            return self.td > other.td
+            return self.td >= other.td
 
     def __gt__(self, other):
         if self.td is None:
-            return self.dt > other.dt
+            if isinstance(other, str):
+                return self.dt > self.from_iso(other).dt
+            elif isinstance(other, datetime) or isinstance(other, date):
+                return self.dt > self.from_datetime(other).dt
+            else:
+                return self.dt > other.dt
         else:
             return self.td > other.td
 
