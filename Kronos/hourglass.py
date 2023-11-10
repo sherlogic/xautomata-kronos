@@ -1,7 +1,7 @@
 from datetime import datetime, date
-from Kronos.periods import periods
-from Kronos.converters import converters
-from Kronos.costructors import costructors, TimeZones
+from Kronos.periods import Periods
+from Kronos.converters import Converters
+from Kronos.costructors import Costructors, TimeZones, datetime_kronos
 
 
 class Format:
@@ -9,21 +9,11 @@ class Format:
     ISO = 'ISO8601'
 
 
-class Core(periods, converters, costructors):
+class Core(Periods, Converters, Costructors):
 
     def __init__(self, dt=None, tz=TimeZones.rome, td=None):
 
-        if not isinstance(dt, datetime) and not isinstance(dt, date) and dt is not None:
-            raise ValueError('dt inserted is not a datetime or date')
-
-        if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
-
-        if type(dt) == date and dt is not None:
-            dt = datetime(year=dt.year, month=dt.month, day=dt.day, hour=0, minute=0, second=0, microsecond=0, tzinfo=tz)
-
-        if isinstance(dt, datetime):
-            if dt.tzinfo is None:
-                dt = dt.replace(tzinfo=tz)
+        dt = datetime_kronos(dt, tz)
 
         self.dt = dt
         self.td = td

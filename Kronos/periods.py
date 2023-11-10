@@ -1,4 +1,4 @@
-class periods:
+class Periods:
     td = None
 
     def in_periods(self, period='seconds'):

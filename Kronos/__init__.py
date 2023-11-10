@@ -1,7 +1,7 @@
 from Kronos.hourglass import Core, TimeZones, Format
 
 
-def now(tz=TimeZones.rome):
+def now(tz=None):
     """
     Produce the current datetime
 
@@ -13,7 +13,7 @@ def now(tz=TimeZones.rome):
     return Core.now(tz=tz)
 
 
-def today(tz=TimeZones.rome):
+def today(tz=None):
     """
     Produce the current day
     Args:
@@ -24,7 +24,7 @@ def today(tz=TimeZones.rome):
     return Core.today(tz=tz)
 
 
-def primetime(year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0, tz=TimeZones.rome):
+def primetime(year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0, tz=None):
     """
     Procude the Kronos element of the specified date
 
@@ -43,7 +43,7 @@ def primetime(year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0, t
     return Core.primetime(year=year, month=month, day=day, hour=hour, minute=minute, second=second, microsecond=microsecond, tz=tz)
 
 
-def from_isoformat(iso, tz=TimeZones.rome):
+def from_isoformat(iso, tz=None):
     """
     Convert isoformat string to Kronos
     Args:
@@ -55,7 +55,7 @@ def from_isoformat(iso, tz=TimeZones.rome):
     return Core.from_isoformat(iso=iso, tz=tz)
 
 
-def from_iso(iso, tz=TimeZones.rome):
+def from_iso(iso, tz=None):
     """
     Convert isoformat string to Kronos
     Args:
@@ -67,7 +67,7 @@ def from_iso(iso, tz=TimeZones.rome):
     return Core.from_iso(iso=iso, tz=tz)
 
 
-def from_timestamp(timestamp, tz=TimeZones.rome):
+def from_timestamp(timestamp, tz=None):
     """
     convert a timestamp to Kronos
     Args:
@@ -79,7 +79,7 @@ def from_timestamp(timestamp, tz=TimeZones.rome):
     return Core.from_timestamp(timestamp=timestamp, tz=tz)
 
 
-def from_ts(timestamp, tz=TimeZones.rome):
+def from_ts(timestamp, tz=None):
     """
     convert a timestamp to Kronos
     Args:
@@ -91,7 +91,7 @@ def from_ts(timestamp, tz=TimeZones.rome):
     return Core.from_ts(timestamp=timestamp, tz=tz)
 
 
-def from_datetime(dt, tz=TimeZones.rome):
+def from_datetime(dt, tz=None):
     """
     convert a datetime or date to Kronos
 
@@ -104,7 +104,7 @@ def from_datetime(dt, tz=TimeZones.rome):
     return Core.from_datetime(dt=dt, tz=tz)
 
 
-def from_dt(dt, tz=TimeZones.rome):
+def from_dt(dt, tz=None):
     """
     convert a datetime or date to Kronos
 
@@ -141,7 +141,7 @@ def from_td(td):
     return Core.from_td(td)
 
 
-def from_format(string: str, format: str, tz=TimeZones.rome):
+def from_format(string: str, format: str, tz=None):
     """
     convert a string with a given format to Kronos
 
@@ -155,7 +155,7 @@ def from_format(string: str, format: str, tz=TimeZones.rome):
     return Core.from_format(string=string, format=format, tz=tz)
 
 
-def from_list_iso_to_datetime(list_iso, tz=TimeZones.rome):
+def from_list_iso_to_datetime(list_iso, tz=None):
     """
     convert a list of string with isoformat into a list of datetime
     Args:
@@ -167,7 +167,7 @@ def from_list_iso_to_datetime(list_iso, tz=TimeZones.rome):
     return Core.from_list_iso_to_datetime(list_iso=list_iso, tz=tz)
 
 
-def from_list_iso(list_iso, tz=TimeZones.rome):
+def from_list_iso(list_iso, tz=None):
     """
     convert a list of string with isoformat into a list of Kronos
     Args:

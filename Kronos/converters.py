@@ -1,6 +1,7 @@
 from datetime import date, datetime, timedelta
 
-class converters:
+
+class Converters:
 
     def __init__(self, dt=None, td=None):
         self.dt = dt
@@ -61,3 +62,7 @@ class converters:
         Returns: timedelta
         """
         return self.td
+
+    def new_tz(self, tz):
+        """modify the time accordingly to a new timezone"""
+        return self.dt.astimezone(tz=tz)
