@@ -5,19 +5,19 @@ class Periods:
         """
         convert a time difference into the chosen time period
         """
-        if period == 'seconds':
+        if period in 'seconds':
             td = int(self.td.total_seconds())
-        elif period == 'minutes':
+        elif period in 'minutes':
             td = int(self.td.total_seconds()/60)
-        elif period == 'hours':
+        elif period in 'hours':
             td = int(self.td.total_seconds()/(60*60))
-        elif period == 'days':
+        elif period in 'days':
             td = int(self.td.total_seconds()/(60*60*24))
-        elif period == 'weeks':
+        elif period in 'weeks':
             td = int(self.td.total_seconds()/(60*60*24*7))
-        elif period == 'months':
+        elif period in 'months':
             td = int((self.td.total_seconds()/(60*60*24*7*(52/12))))
-        elif period == 'years':
+        elif period in 'years':
             td = int(self.td.total_seconds()/(60*60*24*7*52))
         else:
             raise NotImplementedError
