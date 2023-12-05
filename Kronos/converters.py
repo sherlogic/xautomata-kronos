@@ -1,4 +1,5 @@
 from datetime import date, datetime, timedelta
+from Kronos.costructors import TimeZones
 
 
 class Converters:
@@ -63,6 +64,16 @@ class Converters:
         """
         return self.td
 
-    def new_tz(self, tz):
+    def move_tz(self, tz):
         """modify the time accordingly to a new timezone"""
-        return self.dt.astimezone(tz=tz)
+        if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
+        new_kronos = self.__class__()
+        new_kronos.dt = self.dt.astimezone(tz=tz)
+        return new_kronos
+
+    def replace_tz(self, tz):
+        """overwrite the timezone"""
+        if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
+        new_kronos = self.__class__()
+        new_kronos.dt = self.dt.replace(tzinfo=tz)
+        return new_kronos
