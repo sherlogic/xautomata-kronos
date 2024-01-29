@@ -17,13 +17,13 @@ class sliders:
         """
         function that set to the start of the selected period
         """
-        if period == 'minute':
+        if period in 'minutes':
             dt = self.dt.replace(second=0, microsecond=0)
-        elif period == 'hour':
+        elif period in 'hours':
             dt = self.dt.replace(minute=0, second=0, microsecond=0)
-        elif period == 'day':
+        elif period in 'days':
             dt = self.dt.replace(hour=0, minute=0, second=0, microsecond=0)
-        elif period == 'week':
+        elif period in 'weeks':
             if (self.dt.day - self.dt.weekday()) < 1:
                 month = self.dt.month - 1
                 year = self.dt.year
@@ -36,9 +36,9 @@ class sliders:
                 month = self.dt.month
                 year = self.dt.year
             dt = self.dt.replace(year=year, month=month, day=day, hour=0, minute=0, second=0, microsecond=0)
-        elif period == 'month':
+        elif period in 'months':
             dt = self.dt.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        elif period == 'year':
+        elif period in 'years':
             dt = self.dt.replace(month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
         else:
             raise NotImplementedError
@@ -84,13 +84,13 @@ class sliders:
         """
         function that set to the end of the selected period
         """
-        if period == 'minute':
+        if period in 'minutes':
             dt = self.dt.replace(second=59, microsecond=0)
-        elif period == 'hour':
+        elif period in 'hours':
             dt = self.dt.replace(minute=59, second=59, microsecond=0)
-        elif period == 'day':
+        elif period in 'days':
             dt = self.dt.replace(hour=23, minute=59, second=59, microsecond=0)
-        elif period == 'week':
+        elif period in 'weeks':
             delta = 6 - self.dt.weekday()  # trasformo lunedi in 6 e domenica in 0 e poi calcolo qual'è il giorno di arrivo con day + delta
             if (self.dt.day + delta) > DAYS_PER_MONTHS[int(_is_leap(self.dt.year))][self.dt.month]:
                 to_end_month = DAYS_PER_MONTHS[int(_is_leap(self.dt.year))][self.dt.month] - self.dt.day
@@ -105,10 +105,10 @@ class sliders:
                 month = self.dt.month
                 year = self.dt.year
             dt = self.dt.replace(year=year, month=month, day=day, hour=23, minute=59, second=59, microsecond=0)
-        elif period == 'month':
+        elif period in 'months':
             dt = self.dt.replace(day=DAYS_PER_MONTHS[int(_is_leap(self.dt.year))][self.dt.month], hour=23, minute=59, second=59,
                                  microsecond=0)
-        elif period == 'year':
+        elif period in 'years':
             dt = self.dt.replace(month=12, day=31, hour=23, minute=59, second=59, microsecond=0)
         else:
             raise NotImplementedError
