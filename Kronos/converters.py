@@ -77,3 +77,18 @@ class Converters:
         new_kronos = self.__class__()
         new_kronos.dt = self.dt.replace(tzinfo=tz)
         return new_kronos
+
+    def remove_tz(self):
+        new_kronos = self.__class__()
+        new_kronos.dt = self.dt.replace(tzinfo=None)
+        return new_kronos
+    #
+    # @classmethod
+    # def move_tz_from_list(cls, list_old_tz, tz):
+    #     """overwrite the timezone from a list"""
+    #     if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
+    #
+    #     def move_tz_single(tz):
+    #         return cls.move_tz(tz)
+    #
+    #     return list(map(move_tz_single, tz))

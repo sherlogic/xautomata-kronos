@@ -14,10 +14,9 @@ def datetime_kronos(dt, tz):
         dt = datetime(year=dt.year, month=dt.month, day=dt.day, hour=0, minute=0, second=0, microsecond=0)
 
     if isinstance(dt, datetime):  # serve per leggere i datetime
-        if tz is None:
-            tz = TimeZones(dt).rome
-
         if dt.tzinfo is None:
+            if tz is None:
+                tz = TimeZones(dt).rome
             dt = dt.replace(tzinfo=tz)
     return dt
 

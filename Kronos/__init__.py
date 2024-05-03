@@ -1,4 +1,4 @@
-from Kronos.hourglass import Core, TimeZones, Format
+from Kronos.hourglass import Core, TimeZones, Format, Converters
 
 
 def now(tz=None):
@@ -177,3 +177,15 @@ def from_list_iso(list_iso, tz=None):
     Returns: list[Kronos]
     """
     return Core.from_list_iso(list_iso=list_iso, tz=tz)
+
+#
+# def move_tz_from_list(list_old_tz, tz=None):
+#     """
+#     modify the time accordingly to a new timezone for a list of Kronos
+#     Args:
+#         list_old_tz (list[str]): list of Kronos
+#         tz: Timezone. Default to Rome
+#
+#     Returns: list[Kronos]
+#     """
+#     return Converters.move_tz_from_list(list_old_tz=list_old_tz, tz=tz)
