@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime, date, time
 from Kronos.periods import Periods
 from Kronos.converters import Converters
 from Kronos.costructors import Costructors, TimeZones, datetime_kronos
@@ -15,18 +15,21 @@ class Core(Periods, Converters, Costructors):
 
         dt = datetime_kronos(dt, tz)
 
-        self.dt = dt
-        self.td = td
+        self.dt = dt  # datetime
+        self.td = td  # timedelta
 
     def __sub__(self, other):
         if self.td is None:
-            if isinstance(other, str):
+            if isinstance(other, str):  # kronos puo essere sottratto ad un isoformat
                 td = self.dt - self.from_iso(other).dt
-            elif isinstance(other, datetime) or isinstance(other, date):
+            elif isinstance(other, datetime) or isinstance(other, date):  # kronost puo essere sottratto ad un datetime
                 td = self.dt - self.from_datetime(other).dt
-            else:
+            elif isinstance(other, time):  # kronost puo essere sottratto ad un time
+                td = self.dt - self.from_time(other).dt
+            else:  # kronos puo essere sottratto ad un altro kronos
                 td = self.dt - other.dt
             return self.__class__(td=td)
+
         else:
             td = self.td - other.td
             return self.__class__(td=td)
@@ -37,6 +40,8 @@ class Core(Periods, Converters, Costructors):
                 td = self.dt + self.from_iso(other).dt
             elif isinstance(other, datetime) or isinstance(other, date):
                 td = self.dt + self.from_datetime(other).dt
+            elif isinstance(other, time):
+                td = self.dt + self.from_time(other).dt
             else:
                 td = self.dt + other.dt
             return self.__class__(td=td)
@@ -50,6 +55,8 @@ class Core(Periods, Converters, Costructors):
                 return self.dt == self.from_iso(other).dt
             elif isinstance(other, datetime) or isinstance(other, date):
                 return self.dt == self.from_datetime(other).dt
+            elif isinstance(other, time):
+                return self.dt == self.from_time(other).dt
             else:
                 return self.dt == other.dt
         else:
@@ -61,6 +68,8 @@ class Core(Periods, Converters, Costructors):
                 return self.dt <= self.from_iso(other).dt
             elif isinstance(other, datetime) or isinstance(other, date):
                 return self.dt <= self.from_datetime(other).dt
+            elif isinstance(other, time):
+                return self.dt <= self.from_time(other).dt
             else:
                 return self.dt <= other.dt
         else:
@@ -72,6 +81,8 @@ class Core(Periods, Converters, Costructors):
                 return self.dt < self.from_iso(other).dt
             elif isinstance(other, datetime) or isinstance(other, date):
                 return self.dt < self.from_datetime(other).dt
+            elif isinstance(other, time):
+                return self.dt < self.from_time(other).dt
             else:
                 return self.dt < other.dt
         else:
@@ -83,6 +94,8 @@ class Core(Periods, Converters, Costructors):
                 return self.dt >= self.from_iso(other).dt
             elif isinstance(other, datetime) or isinstance(other, date):
                 return self.dt >= self.from_datetime(other).dt
+            elif isinstance(other, time):
+                return self.dt >= self.from_time(other).dt
             else:
                 return self.dt >= other.dt
         else:
@@ -94,6 +107,8 @@ class Core(Periods, Converters, Costructors):
                 return self.dt > self.from_iso(other).dt
             elif isinstance(other, datetime) or isinstance(other, date):
                 return self.dt > self.from_datetime(other).dt
+            elif isinstance(other, time):
+                return self.dt > self.from_time(other).dt
             else:
                 return self.dt > other.dt
         else:

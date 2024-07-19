@@ -8,6 +8,7 @@ DAYS_PER_MONTHS = (
     (-1, 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31),
 )
 
+
 class sliders:
 
     def __init__(self, dt=None):
@@ -256,6 +257,7 @@ class sliders:
         start = self.subtract_duration(**{scale: interval+offset})
         stop = self.subtract_duration(**{scale: offset})
         return start, stop
+
 
 def _sign(x):
     return int(copysign(1, x))

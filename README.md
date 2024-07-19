@@ -6,9 +6,9 @@
 Classe per la gestione dei timestamp in modo chiaro e univoco. La classe forza l'uso delle timezone indipendentemente da come
 si crea l'oggetto temporale.
 
-Kronos è basata unicamente su librerie standard di python datetime, math e pytz.
+Kronos è basata unicamente sulla libreria standard di python datetime.
 
-Un oggetto Kronos è interamente compatibile con un oggetto datetime.
+Un oggetto Kronos è interamente compatibile con un oggetto datetime (che sia datetime.datetime, datetime.date, datetime.time).
 
 # utilizzo
 
@@ -24,7 +24,8 @@ Kronos.primetime(year=2023, month=4)
 **primetime** ha come campo obligatorio l'anno, i restanti valori vengono messi all'inizio del range temporale non assegnato.
 Se non definita, di default viene impostata la timezone di Roma.
 
-``Kronos.now()`` e ``Kronos.today()`` restituiscono l'oggetto Kronos rispettivamente con il momento corrente o il giorno corrente (il giorno è privo di time zone non avendo le ore).
+``Kronos.now()`` e ``Kronos.today()`` restituiscono l'oggetto Kronos rispettivamente con il momento corrente o 
+il giorno corrente (la funzione ``Kronos.today()`` restituisce anche le ore e la timezone, semplicemente restituisce la data con l'ora fissata all'inizio del giorno).
 
 ### conversione
 E' possibile passare da datetime a Kronos e viceversa con semplici passaggi
@@ -32,8 +33,7 @@ E' possibile passare da datetime a Kronos e viceversa con semplici passaggi
 import Kronos
 from datetime import datetime
 now_k = Kronos.from_datetime(datetime.now())  # da datetime a kronos
-now_dt1 = Kronos.now().dt  # da Kronos a datetime estraendo l'attributo
-now_dt2 = Kronos.now().datetime()  # da Kronos a datetime con funzione di estrazione
+now_dt = Kronos.now().datetime()  # da Kronos a datetime con funzione di estrazione
 ```
 
 E' altrettanto semplice caricare convertire un isoformat in un oggetto kronos ``Kronos.from_iso('2023-01-01T00:00:00')``.
@@ -43,12 +43,20 @@ Un elemento Kronos è poi facilmente convertibile in un formato isoformat in piu
 import Kronos
 now_iso1 = Kronos.now().iso()  # da Kronos a isoformat
 now_iso2 = Kronos.now().isoformat()  # da Kronos a isoformat (identica alla precedente)
-now_iso3 = Kronos.now().dt.isoformat()  # da Kronos a datetime a isoformat()
+now_iso3 = Kronos.now().datetime().isoformat()  # da Kronos a datetime a isoformat()
 ```
 
-In tutte queste situazioni, se la time zone è assente, viene sempre automaticamente aggiunta.
+In tutte queste situazioni, se la time zone è assente, **viene sempre automaticamente aggiunta**.
 
 Se si carica un elemento **date** questo verra convertito in un **datetime** e abbianto ad una timezone.
+Analogamente se si carica un elemento **time** questo verra convertito in **datetime** abbinando sempre la stessa data di 2000-10-10 
+e in mancanza ti timezone verra assegnata pure quella, come si vede nel seguente esempio:
+
+```python
+import Kronos
+Kronos.from_iso("12:00:00")  # da time in isoformat a kronos
+>> 2000-10-10 12:00:00+02:00
+```
 
 ### costruttori
 - now
@@ -59,12 +67,13 @@ Se si carica un elemento **date** questo verra convertito in un **datetime** e a
 - from_timestamp
 - from_ts
 - from_datetime
-- from_dt
+- from_dt (aka from_datetime)
 - from_format
 - from_list_iso_to_datetime
 - from_list_iso
 - from_timedelta
-- from_td
+- from_td (aka from_timedelta)
+- from_time
 
 ### funzioni
 Esistono una serie di operazioni applicabili agli oggetti Kronos:
@@ -73,7 +82,7 @@ Esistono una serie di operazioni applicabili agli oggetti Kronos:
 - add_duration
 - subtract_duration
 - ==, >, >=, <, <=, -
-- date, datetime, isoformat, iso, timestamp, ts
+- date, datetime, isoformat, iso, timestamp, ts, time
 
 Le operazioni ==, >, >=, <, <=, - permettono di confrontare date cross classi, permettendo di comparare stringhe in isoformat e datetime con Kronos, di seguito un esempio.
 ```python
@@ -155,7 +164,7 @@ E' possibile passare da timedelta a Kronos e viceversa con semplici passatti
 import Kronos
 from datetime import timedelta
 now_k = Kronos.from_timedelta(td=timedelta(days=1))  # da timedelta a kronos
-now_td = (Kronos.now() - Kronos.now().subtract_duration(days=1)).td  # da Kronos a timedelta
+now_td = (Kronos.now() - Kronos.now().subtract_duration(days=1)).timedelta()  # da Kronos a timedelta
 ```
 
 ### approssimazione

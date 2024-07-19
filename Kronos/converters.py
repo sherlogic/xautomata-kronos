@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import date, datetime, timedelta, time
 from Kronos.costructors import TimeZones
 
 
@@ -63,6 +63,15 @@ class Converters:
         Returns: timedelta
         """
         return self.td
+
+    def time(self) -> time:
+        """
+        return the time version of the kronos
+        Returns: Time
+        """
+        # t = self.dt.time()
+        # t.tzinfo = self.dt.tzinfo
+        return time(hour=self.dt.hour, minute=self.dt.minute, second=self.dt.second, microsecond=self.dt.microsecond, tzinfo=self.dt.tzinfo)
 
     def move_tz(self, tz):
         """modify the time accordingly to a new timezone"""

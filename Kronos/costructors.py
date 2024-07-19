@@ -1,17 +1,24 @@
 from typing import List
-from datetime import timezone, timedelta, datetime, date
+from datetime import timezone, timedelta, datetime, date, time
 from Kronos.sliders import sliders
 
 
 def datetime_kronos(dt, tz):
-    if not isinstance(dt, datetime) and not isinstance(dt, date) and dt is not None:
-        raise ValueError('dt inserted is not a datetime or date')
+    if not isinstance(dt, datetime) and not isinstance(dt, date) and not isinstance(dt, time) and dt is not None:
+        raise ValueError('dt inserted is not a datetime or date or time')
 
     if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
 
     if type(dt) == date and dt is not None:  # permette di identificare le date, senza prendere i datetime
         # le date vengono trasformate in datetime senza tz, che viene aggiunta dopo
         dt = datetime(year=dt.year, month=dt.month, day=dt.day, hour=0, minute=0, second=0, microsecond=0)
+
+    if type(dt) == time and dt is not None:  # permette di identificare le time
+        # le time vengono trasformate in datetime
+        if dt.tzinfo is None:
+            dt = datetime(2000, 10, 10, dt.hour, dt.minute, dt.second, dt.microsecond)
+        else:
+            dt = datetime(2000, 10, 10, dt.hour, dt.minute, dt.second, dt.microsecond, tzinfo=dt.tzinfo)
 
     if isinstance(dt, datetime):  # serve per leggere i datetime
         if dt.tzinfo is None:
@@ -50,8 +57,8 @@ class Costructors(sliders):
 
         dt = datetime_kronos(dt, tz)
 
-        self.dt = dt
-        self.td = td
+        self.dt = dt  # datetime
+        self.td = td  # timedelta
 
     @classmethod
     def now(cls, tz=None):
@@ -109,8 +116,13 @@ class Costructors(sliders):
         Returns: Kronos
         """
         if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
-        dt = datetime.fromisoformat(iso)
-        return cls(dt, tz=tz)
+        try:
+            dt = datetime.fromisoformat(iso)
+            return cls(dt, tz=tz)
+        except:
+            t = time.fromisoformat(iso)
+            return cls(t, tz=tz)
+
 
     @classmethod
     def from_iso(cls, iso, tz=None):
@@ -202,6 +214,19 @@ class Costructors(sliders):
         Returns: Kronos
         """
         return cls(td=td)
+
+    @classmethod
+    def from_time(cls, t: [time], tz=None):
+        """
+        convert a timedelta to Kronos
+
+        Args:
+            t (time):
+            tz: Timezone. Default to Rome
+
+        Returns: Kronos
+        """
+        return cls(t, tz=tz)
 
     @classmethod
     def from_format(cls, string: str, format: str, tz=None):

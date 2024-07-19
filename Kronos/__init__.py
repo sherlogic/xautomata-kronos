@@ -141,6 +141,10 @@ def from_td(td):
     return Core.from_td(td)
 
 
+def from_time(t, tz=None):
+    return Core.from_time(t, tz=tz)
+
+
 def from_format(string: str, format: str, tz=None):
     """
     convert a string with a given format to Kronos
