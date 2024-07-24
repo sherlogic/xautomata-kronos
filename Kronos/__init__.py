@@ -104,6 +104,19 @@ def from_datetime(dt, tz=None):
     return Core.from_datetime(dt=dt, tz=tz)
 
 
+def from_date(dt, tz=None):
+    """
+    convert a datetime or date to Kronos
+
+    Args:
+        dt (datetime, date):
+        tz: Timezone. Default to Rome
+
+    Returns: Kronos
+    """
+    return Core.from_date(dt=dt, tz=tz)
+
+
 def from_dt(dt, tz=None):
     """
     convert a datetime or date to Kronos

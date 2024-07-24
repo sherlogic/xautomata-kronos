@@ -1,13 +1,12 @@
 from typing import List
-from datetime import timezone, timedelta, datetime, date, time
+from datetime import timedelta, datetime, date, time
 from Kronos.sliders import sliders
+from Kronos.timezones import TimeZones
 
 
 def datetime_kronos(dt, tz):
     if not isinstance(dt, datetime) and not isinstance(dt, date) and not isinstance(dt, time) and dt is not None:
         raise ValueError('dt inserted is not a datetime or date or time')
-
-    if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
 
     if type(dt) == date and dt is not None:  # permette di identificare le date, senza prendere i datetime
         # le date vengono trasformate in datetime senza tz, che viene aggiunta dopo
@@ -20,35 +19,13 @@ def datetime_kronos(dt, tz):
         else:
             dt = datetime(2000, 10, 10, dt.hour, dt.minute, dt.second, dt.microsecond, tzinfo=dt.tzinfo)
 
-    if isinstance(dt, datetime):  # serve per leggere i datetime
-        if dt.tzinfo is None:
-            if tz is None:
-                tz = TimeZones(dt).rome
-            dt = dt.replace(tzinfo=tz)
+    if isinstance(dt, datetime) and dt.tzinfo is None:  # serve per leggere i datetime senza timezone
+        if isinstance(tz, str): tz = TimeZones(dt).dict_zones[tz]
+        # print(f'tz: {tz}')
+        if tz is None:
+            tz = TimeZones(dt).utc  # la zona di default che viene messa in assenza di zona e' utc (00)
+        dt = dt.replace(tzinfo=tz)
     return dt
-
-
-class TimeZones:
-    utc = timezone.utc
-    rome = timezone(timedelta(hours=1))  # time zone invernale o solare
-    rome_legal = timezone(timedelta(hours=2))  # timezone estiva o legale
-
-    # +2 tra le 2:00 del mattino dell'ultima domenica di marzo e le 3:00 del mattino dell'ultima domenica di ottobre
-    # +1 le 3:00 del mattino dell'ultima domenica di ottobre e le 2:00 del mattino dell'ultima domenica di marzo
-    dict_zones = {'utc': utc, 'rome': rome, 'rome_legal': rome_legal}
-
-    def __init__(self, now: datetime = datetime.now()):
-        weekday_last_day_of_march = datetime(year=now.year, month=3, day=31).weekday()
-        last_sun_of_march = datetime(year=now.year, month=3, day=31 - (weekday_last_day_of_march + 1), hour=2)
-
-        weekday_last_day_of_oct = datetime(year=now.year, month=10, day=31).weekday()
-        last_sun_of_oct = datetime(year=now.year, month=10, day=31 - (weekday_last_day_of_oct + 1), hour=3)
-
-        is_legal = last_sun_of_march < now < last_sun_of_oct
-        if is_legal:
-            # rome
-            self.rome = self.rome_legal
-            self.dict_zones['rome'] = self.rome_legal
 
 
 class Costructors(sliders):
@@ -70,7 +47,7 @@ class Costructors(sliders):
 
         Returns: Kronos
         """
-        if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
+        # if isinstance(tz, str): tz = TimeZones(datetime.now()).dict_zones[tz]
         return cls(datetime.now(), tz=tz)
 
     @classmethod
@@ -82,7 +59,7 @@ class Costructors(sliders):
 
         Returns: Kronos
         """
-        if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
+        # if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
         return cls.now(tz).start_of_day()
 
     @classmethod
@@ -115,14 +92,13 @@ class Costructors(sliders):
 
         Returns: Kronos
         """
-        if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
+        # if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
         try:
             dt = datetime.fromisoformat(iso)
             return cls(dt, tz=tz)
         except:
             t = time.fromisoformat(iso)
             return cls(t, tz=tz)
-
 
     @classmethod
     def from_iso(cls, iso, tz=None):
@@ -146,8 +122,8 @@ class Costructors(sliders):
 
         Returns: Kronos
         """
-        if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
         dt = datetime.fromtimestamp(timestamp, tz=TimeZones.utc)
+        if isinstance(tz, str): tz = TimeZones(dt).dict_zones[tz]
         if tz is not None: dt = dt.astimezone(tz=tz)
         return cls(dt)
 
@@ -174,9 +150,22 @@ class Costructors(sliders):
 
         Returns: Kronos
         """
-        if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
-        if tz is None: tz = TimeZones.rome
+        # if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
+        # if tz is None: tz = TimeZones.rome
         return cls(dt, tz=tz)
+
+    @classmethod
+    def from_date(cls, dt: [datetime, date], tz=None):
+        """
+        convert a datetime or date to Kronos
+
+        Args:
+            dt (datetime, date):
+            tz: Timezone. Default to Rome
+
+        Returns: Kronos
+        """
+        return cls.from_datetime(dt, tz=tz)
 
     @classmethod
     def from_dt(cls, dt: [datetime, date], tz=None):
@@ -252,7 +241,7 @@ class Costructors(sliders):
 
         Returns: list[datetime]
         """
-        if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
+        # if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
 
         def iso_datetime(iso):
             return cls.from_iso(iso, tz).dt
@@ -269,7 +258,7 @@ class Costructors(sliders):
 
         Returns: list[Kronos]
         """
-        if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
+        # if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
 
         def iso_kronos(iso):
             return cls.from_iso(iso, tz)

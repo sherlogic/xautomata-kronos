@@ -9,10 +9,12 @@ si crea l'oggetto temporale.
 Kronos è basata unicamente sulla libreria standard di python datetime.
 
 Un oggetto Kronos è interamente compatibile con un oggetto datetime (che sia datetime.datetime, datetime.date, datetime.time).
+Possono essere fatte operazioni incociate Kronos con datetime o isoformat. In ogni situazione Kronos convertira l'oggetto non Kronos per poi usarlo,
+aggiungendo quindi la timezone se manca.
 
 # utilizzo
 
-## date
+## datetime / date / time
 
 ### creazione
 il metodo **primetime** permette di creare un elemento temporale Kronos
@@ -22,10 +24,11 @@ Kronos.primetime(year=2023, month=4)
 >> 2023-04-01 00:00:00+02:00
 ```
 **primetime** ha come campo obligatorio l'anno, i restanti valori vengono messi all'inizio del range temporale non assegnato.
-Se non definita, di default viene impostata la timezone di Roma.
+Se non definita, di default viene impostata la timezone di UTC.
 
 ``Kronos.now()`` e ``Kronos.today()`` restituiscono l'oggetto Kronos rispettivamente con il momento corrente o 
 il giorno corrente (la funzione ``Kronos.today()`` restituisce anche le ore e la timezone, semplicemente restituisce la data con l'ora fissata all'inizio del giorno).
+Questo e' valido per ogni elemento che non sia un datetime, le date e i time vengono trasformati in datetime con timezone.
 
 ### conversione
 E' possibile passare da datetime a Kronos e viceversa con semplici passaggi
@@ -46,7 +49,7 @@ now_iso2 = Kronos.now().isoformat()  # da Kronos a isoformat (identica alla prec
 now_iso3 = Kronos.now().datetime().isoformat()  # da Kronos a datetime a isoformat()
 ```
 
-In tutte queste situazioni, se la time zone è assente, **viene sempre automaticamente aggiunta**.
+In tutte queste situazioni, se la time zone è assente, **viene sempre automaticamente aggiunta e quella di default e' UTC**.
 
 Se si carica un elemento **date** questo verra convertito in un **datetime** e abbianto ad una timezone.
 Analogamente se si carica un elemento **time** questo verra convertito in **datetime** abbinando sempre la stessa data di 2000-10-10 
@@ -67,6 +70,7 @@ Kronos.from_iso("12:00:00")  # da time in isoformat a kronos
 - from_timestamp
 - from_ts
 - from_datetime
+- from_date
 - from_dt (aka from_datetime)
 - from_format
 - from_list_iso_to_datetime
@@ -88,13 +92,13 @@ Le operazioni ==, >, >=, <, <=, - permettono di confrontare date cross classi, p
 ```python
 import Kronos
 from datetime import date, datetime
-Kronos.now() > Kronos.from_iso("2022-01-01")
+Kronos.now() > Kronos.from_iso("2022-01-01")  # Kronos con Kronos
 >>> True
-Kronos.now() > datetime.fromisoformat("2022-01-01")
+Kronos.now() > datetime.fromisoformat("2022-01-01")  # Kronos con datetime
 >>> True
-Kronos.now() > date.fromisoformat("2022-01-01")
+Kronos.now() > date.fromisoformat("2022-01-01")  # Kronos con date
 >>> True
-Kronos.now() > "2022-01-01"
+Kronos.now() > "2022-01-01"  # Kronos con stringa
 >>> True
 ```
 
@@ -129,9 +133,9 @@ date.subtract_duration(years=1)  # tolgo 1 anno
 Tutte le operazioni applicabili su un elemento Kronos sono concatenabili
 ```python
 import Kronos
-date = Kronos.today().to_datetime().start_of_month().end_of_day()
+date = Kronos.today().start_of_month().end_of_day().add_duration(hours=1)
 ```
-Nell'esempio qui sopra viene presa la gioranta in formato date, viene convertita in datetime, viene preso l'inizio del mese e da li ci si sposta alla fine della giornata.
+Nell'esempio qui sopra viene presa la gioranta in formato date, viene preso l'inizio del mese e da li ci si sposta alla fine della giornata poi si aggiunge un ora.
 
 ### intervallo temporale
 esiste un metodo leggermente differente, che dato un Kronos, un intervallo tempora e un offset restituisce gli estremi del range temporale richiesto.
@@ -143,7 +147,7 @@ start, stop = Kronos.from_iso('2023-01-01T00:00:00').from_interval(10, 10, 'days
 
 ## differenze temporali
 Gli elementi Kronos supportano operazione di somma e sottrazione, ma a differenza di datetime, un operazione matematica tra due elementi kronos produce sempre un elemento kronos.
-La ragione di questa scelta è legata al minimizzare gli import per fare operazioni su oggetti temporale.
+La ragione di questa scelta è legata al minimizzare gli import per fare operazioni su oggetti temporali.
 Chiaramente una volta che un oggetto Kronos ha subito una operazione di questo genere non potra piu supportare i metodi indicati sopra.
 Nonostante cio' supporta metodi analoghi a quelli di timedelta e si comportano in modo similare agli altri metodi di Kronos.
 
@@ -176,4 +180,56 @@ yesterday = now.subtract_duration(days=1)
 diff = now - yesterday
 diff.in_days()
 >> 1
+```
+
+## Timezones
+Kronos possiede una libreria interna per la gestione delle Timezones.
+La Timezone impostata di Default e' quella UTC, ma ogni volta che si crea un oggetto Kronos e' sempre possibile
+aggiungere l'argomento *tz* per impostare una timezone diversa.
+
+```python
+import Kronos
+Kronos.now('rome')
+Kronos.primetime(2023, tz='rome')
+```
+
+Se l'elemento che si sta convertendo in Kronos gia possiede una timezone, quella impostata in aggiunta non verra usata.
+Kronos si assicura che ogni suo elemento abbia una timezone, ma non si impone l'addove sia gia presente.
+
+### Timezone adattiva
+Sono presenti alcune nazioni di cui viene considerata la timezone rispetto al momento dell'anno modificandola in base
+all'ora solare o legale.
+
+```python
+import Kronos
+Kronos.primetime(2023, 12, 1, 0, 0, 0, 0, 'rome')
+>> 2023-12-01 00:00:00+01:00
+Kronos.primetime(2023, 8, 1, 0, 0, 0, 0, 'rome')
+>> 2023-08-01 00:00:00+02:00
+```
+
+Al momento sono presenti:
+- 'rome' (aka 'it' o 'IT')
+- 'london' (aka 'uk' o 'UK')
+
+### Timezone compatibile
+In qualsiasi campo venga richiesta una timezone, puo essere inserito una qualsiasi oggetto time zone compatibile
+```python
+import Kronos
+from datetime import date, datetime, timedelta, time, timezone
+from pytz import timezone as tz
+Kronos.now(tz=timezone(timedelta(hours=1)))
+>> 2024-07-24 13:35:26.653931+01:00
+Kronos.now(tz=tz('US/Eastern'))
+>> 2024-07-24 13:35:26.711635-04:56
+```
+
+### Timezone generica
+Le timezone intere sono gia codificate e sono richiamabili con semplici stringhe nel campo **tz**
+```python
+import Kronos
+Kronos.now(tz='+01')
+>> 2024-07-24 13:38:12.291010+01:00
+Kronos.now(tz='-06')
+>> 2024-07-24 13:38:12.292010-06:00
 ```

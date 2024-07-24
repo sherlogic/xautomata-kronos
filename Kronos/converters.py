@@ -75,14 +75,14 @@ class Converters:
 
     def move_tz(self, tz):
         """modify the time accordingly to a new timezone"""
-        if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
+        if isinstance(tz, str): tz = TimeZones(self.dt.replace(tzinfo=None)).dict_zones[tz]
         new_kronos = self.__class__()
         new_kronos.dt = self.dt.astimezone(tz=tz)
         return new_kronos
 
     def replace_tz(self, tz):
         """overwrite the timezone"""
-        if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
+        if isinstance(tz, str): tz = TimeZones(self.dt.replace(tzinfo=None)).dict_zones[tz]
         new_kronos = self.__class__()
         new_kronos.dt = self.dt.replace(tzinfo=tz)
         return new_kronos

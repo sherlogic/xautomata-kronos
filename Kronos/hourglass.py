@@ -1,8 +1,8 @@
 from datetime import datetime, date, time
 from Kronos.periods import Periods
 from Kronos.converters import Converters
-from Kronos.costructors import Costructors, TimeZones, datetime_kronos
-
+from Kronos.costructors import Costructors, datetime_kronos
+from Kronos.timezones import TimeZones
 
 class Format:
     # valid iso for pandas format
@@ -11,7 +11,7 @@ class Format:
 
 class Core(Periods, Converters, Costructors):
 
-    def __init__(self, dt=None, tz=TimeZones.rome, td=None):
+    def __init__(self, dt=None, tz=None, td=None):
 
         dt = datetime_kronos(dt, tz)
 
