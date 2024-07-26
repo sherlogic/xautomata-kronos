@@ -21,7 +21,7 @@ il metodo **primetime** permette di creare un elemento temporale Kronos
 ```python
 import Kronos
 Kronos.primetime(year=2023, month=4)
->> 2023-04-01 00:00:00+02:00
+>> 2023-04-01 00:00:00+00:00
 ```
 **primetime** ha come campo obligatorio l'anno, i restanti valori vengono messi all'inizio del range temporale non assegnato.
 Se non definita, di default viene impostata la timezone di UTC.
@@ -58,7 +58,7 @@ e in mancanza ti timezone verra assegnata pure quella, come si vede nel seguente
 ```python
 import Kronos
 Kronos.from_iso("12:00:00")  # da time in isoformat a kronos
->> 2000-10-10 12:00:00+02:00
+>> 2000-10-10 12:00:00+00:00
 ```
 
 ### costruttori
@@ -124,9 +124,9 @@ Permette di aggiungere o togliere un certo ammontare di range temporale dalla da
 import Kronos
 date = Kronos.from_iso('2023-01-01T00:00:00')  # converto un isoformat a Kronos
 date.add_duration(days=3, minutes=7)  # aggiungo 3 giorni e 7 minuti
->> 2023-01-03 00:07:00+02:00
+>> 2023-01-03 00:07:00+00:00
 date.subtract_duration(years=1)  # tolgo 1 anno
->> 2022-01-01 00:00:00+02:00
+>> 2022-01-01 00:00:00+00:00
 ```
 
 ### concatenazione
