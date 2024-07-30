@@ -2,8 +2,8 @@
 
 *Python integration with Xautomata API*
 
-# Xautomata API
-Pacchetto che fornisca una interfaccia semplice per usare le API di Xautomata in python
+# XAutomata Kronos
+Pacchetto che fornisce una metodologia molto semplificata nell'uso dei tempi
 
 # License
 This project is licensed under the terms of the MIT license.
