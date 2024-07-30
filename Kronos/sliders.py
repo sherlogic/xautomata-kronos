@@ -1,6 +1,7 @@
 from typing import Literal
 from math import copysign
 from datetime import datetime, date, timedelta
+import Kronos
 
 # The month lengths in non-leap and leap years respectively.
 DAYS_PER_MONTHS = (
@@ -14,9 +15,15 @@ class sliders:
     def __init__(self, dt=None):
         self.dt = dt
 
-    def start_of(self, period: Literal['minute', 'hour', 'day', 'week', 'month', 'year'] = 'day'):
+    def start_of(self, period: Literal['minute', 'hour', 'day', 'week', 'month', 'year'] = 'day') -> Kronos:
         """
         function that set to the start of the selected period
+
+        Args:
+            period: time range to start from
+
+        Returns:
+            Kronos
         """
         if period in 'minutes':
             dt = self.dt.replace(second=0, microsecond=0)
@@ -45,45 +52,69 @@ class sliders:
             raise NotImplementedError
         return self.__class__(dt)
 
-    def start_of_minute(self):
+    def start_of_minute(self) -> Kronos:
         """
         set to the start of the selected minut
+
+        Returns:
+            Kronos
         """
         return self.start_of('minute')
 
-    def start_of_hour(self):
+    def start_of_hour(self) -> Kronos:
         """
         set to the start of the selected hour
+
+        Returns:
+            Kronos
         """
         return self.start_of('hour')
 
-    def start_of_day(self):
+    def start_of_day(self)-> Kronos:
         """
         set to the start of the selected day
+
+        Returns:
+            Kronos
         """
         return self.start_of('day')
 
-    def start_of_week(self):
+    def start_of_week(self) -> Kronos:
         """
         set to the start of the selected week
+
+        Returns:
+            Kronos
         """
         return self.start_of('week')
 
-    def start_of_month(self):
+    def start_of_month(self) -> Kronos:
         """
         set to the start of the selected month
+
+        Returns:
+            Kronos
         """
         return self.start_of('month')
 
-    def start_of_year(self):
+    def start_of_year(self) -> Kronos:
         """
         set to the start of the selected year
+
+        Returns:
+            Kronos
         """
         return self.start_of('year')
 
-    def end_of(self, period: Literal['minute', 'hour', 'day', 'week', 'month', 'year'] = 'day'):
+    def end_of(self, period: Literal['minute', 'hour', 'day', 'week', 'month', 'year'] = 'day') -> Kronos:
         """
         function that set to the end of the selected period
+
+        Args:
+            period: time range to end from.
+
+        Returns:
+            Kronos
         """
         if period in 'minutes':
             dt = self.dt.replace(second=59, microsecond=0)
@@ -115,54 +146,86 @@ class sliders:
             raise NotImplementedError
         return self.__class__(dt)
 
-    def end_of_minute(self):
+    def end_of_minute(self) -> Kronos:
         """
         set to the end of the selected minute
+
+        Returns:
+            Kronos
         """
         return self.end_of('minute')
 
-    def end_of_hour(self):
+    def end_of_hour(self) -> Kronos:
         """
         set to the end of the selected hour
+
+        Returns:
+            Kronos
         """
         return self.end_of('hour')
 
-    def end_of_day(self):
+    def end_of_day(self) -> Kronos:
         """
         set to the end of the selected day
+
+        Returns:
+            Kronos
         """
         return self.end_of('day')
 
-    def end_of_week(self):
+    def end_of_week(self) -> Kronos:
         """
         set to the end of the selected week
+
+        Returns:
+            Kronos
         """
         return self.end_of('week')
 
-    def end_of_month(self):
+    def end_of_month(self) -> Kronos:
         """
         set to the end of the selected month
+
+        Returns:
+            Kronos
         """
         return self.end_of('month')
 
-    def end_of_year(self):
+    def end_of_year(self) -> Kronos:
         """
         set to the end of the selected year
+
+        Returns:
+            Kronos
         """
         return self.end_of('year')
 
     def add_duration(self,
-                     years=0,
-                     months=0,
-                     weeks=0,
-                     days=0,
-                     hours=0,
-                     minutes=0,
-                     seconds=0,
-                     microseconds=0):
+                     years:float=0,
+                     months:float=0,
+                     weeks:float=0,
+                     days:float=0,
+                     hours:float=0,
+                     minutes:float=0,
+                     seconds:float=0,
+                     microseconds:float=0) -> Kronos:
 
         """
         Adds a duration to a kronos instance.
+
+        Args:
+            years: add an ammount of years
+            months: add an ammount of months
+            weeks: add an ammount of weeks
+            days: add an ammount of days
+            hours: add an ammount of hours
+            minutes: add an ammount of minutes
+            seconds: add an ammount of seconds
+            microseconds: add an ammount of microseconds
+
+        Returns:
+            Kronos
+
         """
         days += weeks * 7
 
@@ -229,16 +292,29 @@ class sliders:
         ))
 
     def subtract_duration(self,
-                          years=0,
-                          months=0,
-                          weeks=0,
-                          days=0,
-                          hours=0,
-                          minutes=0,
-                          seconds=0,
-                          microseconds=0):
+                          years:float=0,
+                          months:float=0,
+                          weeks:float=0,
+                          days:float=0,
+                          hours:float=0,
+                          minutes:float=0,
+                          seconds:float=0,
+                          microseconds:float=0) -> Kronos:
         """
         Subtract a duration to a kronos instance.
+
+        Args:
+            years: Subtract an ammount of years
+            months: Subtract an ammount of months
+            weeks: Subtract an ammount of weeks
+            days: Subtract an ammount of days
+            hours: Subtract an ammount of hours
+            minutes: Subtract an ammount of minutes
+            seconds: Subtract an ammount of seconds
+            microseconds: add an ammount of microseconds
+
+        Returns:
+            Kronos
         """
         return self.add_duration(years=-years,
                                  months=-months,
@@ -253,6 +329,14 @@ class sliders:
     def from_interval(self, interval: int, offset: int, scale: Literal['seconds', 'minutes', 'hours', 'days', 'weeks', 'months', 'years'] = 'days'):
         """
         produce the start and end of a period based on the interval and offset
+
+        Args:
+            interval: interval dimension
+            offset: offset from the data selected
+            scale: scale of the interval
+
+        Returns:
+            Start[Kronos], Stop[Kronos]
         """
         start = self.subtract_duration(**{scale: interval+offset})
         stop = self.subtract_duration(**{scale: offset})

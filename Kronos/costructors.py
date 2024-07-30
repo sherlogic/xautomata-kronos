@@ -2,6 +2,7 @@ from typing import List
 from datetime import timedelta, datetime, date, time
 from Kronos.sliders import sliders
 from Kronos.timezones import TimeZones
+import Kronos
 
 
 def datetime_kronos(dt, tz):
@@ -38,34 +39,37 @@ class Costructors(sliders):
         self.td = td  # timedelta
 
     @classmethod
-    def now(cls, tz=None):
+    def now(cls, tz:TimeZones=None) -> Kronos:
         """
-        Produce the current datetime
+        Produce the Kronos version of the current datetime
 
         Args:
-            tz: Timezone. Default to Rome
+            tz: Timezone. Default to UTC
 
-        Returns: Kronos
+        Returns:
+            Kronos
         """
         # if isinstance(tz, str): tz = TimeZones(datetime.now()).dict_zones[tz]
         return cls(datetime.now(), tz=tz)
 
     @classmethod
-    def today(cls, tz=None):
+    def today(cls, tz:TimeZones=None) -> Kronos:
         """
-        Produce the current day
-        Args:
-            tz: Timezone. Default to Rome
+        Produce the Kronos version of the current day
 
-        Returns: Kronos
+        Args:
+            tz: Timezone. Default to UTC
+
+        Returns:
+            Kronos
         """
         # if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
         return cls.now(tz).start_of_day()
 
     @classmethod
-    def primetime(cls, year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0, tz=None):
+    def primetime(cls, year:int, month:int=1, day:int=1, hour:int=0, minute:int=0, second:int=0, microsecond:int=0, tz:TimeZones=None) -> Kronos:
         """
-        Procude the Kronos element of the specified date
+        Procude the Kronos element of a specified datetime
 
         Args:
             year (int): year
@@ -75,22 +79,25 @@ class Costructors(sliders):
             minute (int): minute
             second (int): second
             microsecond (int): microsecond
-            tz: Timezone. Default to Rome
+            tz: Timezone. Default to UTC
 
-        Returns: Kronos
+        Returns:
+            Kronos
         """
         return cls(datetime(year=year, month=month, day=day, hour=hour, minute=minute, second=second,
                             microsecond=microsecond), tz=tz)
 
     @classmethod
-    def from_isoformat(cls, iso: str, tz=None):
+    def from_isoformat(cls, iso: str, tz:TimeZones=None) -> Kronos:
         """
         Convert isoformat string to Kronos
+
         Args:
             iso (str): isoformat string
-            tz: Timezone. Default to Rome
+            tz: Timezone. Default to UTC
 
-        Returns: Kronos
+        Returns:
+            Kronos
         """
         # if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
         try:
@@ -101,26 +108,30 @@ class Costructors(sliders):
             return cls(t, tz=tz)
 
     @classmethod
-    def from_iso(cls, iso, tz=None):
+    def from_iso(cls, iso:str, tz:TimeZones=None) -> Kronos:
         """
         Convert isoformat string to Kronos
+
         Args:
             iso (str): isoformat string
-            tz: Timezone. Default to Rome
+            tz: Timezone. Default to UTC
 
-        Returns: Kronos
+        Returns:
+             Kronos
         """
         return cls.from_isoformat(iso, tz)
 
     @classmethod
-    def from_timestamp(cls, timestamp, tz=None):
+    def from_timestamp(cls, timestamp:float, tz:TimeZones=None) -> Kronos:
         """
         convert a timestamp to Kronos
+
         Args:
             timestamp (int): timestamp
-            tz: Timezone. Default to Rome
+            tz: Timezone. Default to UTC
 
-        Returns: Kronos
+        Returns:
+            Kronos
         """
         dt = datetime.fromtimestamp(timestamp, tz=TimeZones.utc)
         if isinstance(tz, str): tz = TimeZones(dt).dict_zones[tz]
@@ -128,118 +139,129 @@ class Costructors(sliders):
         return cls(dt)
 
     @classmethod
-    def from_ts(cls, timestamp, tz=None):
+    def from_ts(cls, timestamp:float, tz:TimeZones=None) -> Kronos:
         """
         convert a timestamp to Kronos
+
         Args:
             timestamp (int): timestamp
-            tz: Timezone. Default to Rome
+            tz: Timezone. Default to UTC
 
-        Returns: Kronos
+        Returns:
+            Kronos
         """
         return cls.from_timestamp(timestamp, tz)
 
     @classmethod
-    def from_datetime(cls, dt: [datetime, date], tz=None):
+    def from_datetime(cls, dt: [datetime, date], tz:TimeZones=None) -> Kronos:
         """
         convert a datetime or date to Kronos
 
         Args:
-            dt (datetime, date):
-            tz: Timezone. Default to Rome
+            dt (datetime, date): valid for both date and datetime
+            tz: Timezone. Default to UTC
 
-        Returns: Kronos
+        Returns:
+            Kronos
         """
         # if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
         # if tz is None: tz = TimeZones.rome
         return cls(dt, tz=tz)
 
     @classmethod
-    def from_date(cls, dt: [datetime, date], tz=None):
+    def from_date(cls, dt: [datetime, date], tz:TimeZones=None) -> Kronos:
         """
         convert a datetime or date to Kronos
 
         Args:
-            dt (datetime, date):
-            tz: Timezone. Default to Rome
+            dt (datetime, date): valid for both date and datetime
+            tz: Timezone. Default to UTC
 
-        Returns: Kronos
+        Returns:
+            Kronos
         """
         return cls.from_datetime(dt, tz=tz)
 
     @classmethod
-    def from_dt(cls, dt: [datetime, date], tz=None):
+    def from_dt(cls, dt: [datetime, date], tz:TimeZones=None) -> Kronos:
         """
         convert a datetime or date to Kronos
 
         Args:
-            dt (datetime, date):
-            tz: Timezone. Default to Rome
+            dt (datetime, date): valid for both date and datetime
+            tz: Timezone. Default to UTC
 
-        Returns: Kronos
+        Returns:
+             Kronos
         """
         cls.from_datetime(dt, tz=tz)
 
     @classmethod
-    def from_timedelta(cls, td: [timedelta]):
+    def from_timedelta(cls, td: [timedelta]) -> Kronos:
         """
         convert a timedelta to Kronos
 
         Args:
-            td (timedelta):
+            td (timedelta): timedelta
 
-        Returns: Kronos
+        Returns:
+            Kronos
         """
         return cls(td=td)
 
     @classmethod
-    def from_td(cls, td: [timedelta]):
+    def from_td(cls, td: [timedelta]) -> Kronos:
         """
         convert a timedelta to Kronos
 
         Args:
-            td (timedelta):
+            td (timedelta): timedelta
 
-        Returns: Kronos
+        Returns:
+            Kronos
         """
         return cls(td=td)
 
     @classmethod
-    def from_time(cls, t: [time], tz=None):
+    def from_time(cls, t: [time], tz:TimeZones=None) -> Kronos:
         """
         convert a timedelta to Kronos
 
         Args:
-            t (time):
-            tz: Timezone. Default to Rome
+            t (time): valid for time, with and without TimeZone
+            tz: Timezone. Default to UTC
 
-        Returns: Kronos
+        Returns:
+             Kronos
         """
         return cls(t, tz=tz)
 
     @classmethod
-    def from_format(cls, string: str, format: str, tz=None):
+    def from_format(cls, string: str, format: str, tz: TimeZones=None) -> Kronos:
         """
         convert a string with a given format to Kronos
 
         Args:
             string (str): string with a date
             format (str): format of the string
-            tz: Timezone. Default to Rome
+            tz: Timezone. Default to UTC
 
-        Returns: Kronos
+        Returns:
+            Kronos
         """
         return cls(datetime.strptime(string, format), tz=tz)
 
     @classmethod
-    def from_list_iso_to_datetime(cls, list_iso: List[str], tz=None):
+    def from_list_iso_to_datetime(cls, list_iso: List[str], tz:TimeZones=None) -> List[datetime]:
         """
         convert a list of string with isoformat into a list of datetime
+
         Args:
             list_iso (list[str]): list of isoformat string
-            tz: Timezone. Default to Rome
+            tz: Timezone. Default to UTC
 
-        Returns: list[datetime]
+        Returns:
+             list[datetime]
         """
         # if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
 
@@ -249,14 +271,16 @@ class Costructors(sliders):
         return list(map(iso_datetime, list_iso))
 
     @classmethod
-    def from_list_iso(cls, list_iso, tz=None):
+    def from_list_iso(cls, list_iso:List[str], tz:TimeZones=None):
         """
         convert a list of string with isoformat into a list of Kronos
+
         Args:
             list_iso (list[str]): list of isoformat string
-            tz: Timezone. Default to Rome
+            tz: Timezone. Default to UTC
 
-        Returns: list[Kronos]
+        Returns:
+            list[Kronos]
         """
         # if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
 
