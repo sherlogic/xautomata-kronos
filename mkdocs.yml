@@ -1,0 +1,72 @@
+site_name: Kronos
+site_description: Make times simple
+site_url: https://www.xautomata.com/
+
+theme:
+  name: material
+  features:
+    - search.suggest
+    - search.highlight
+    - content.tabs.link
+    - content.tooltips
+    - navigation.sections
+    - navigation.top
+    - navigation.expand
+    - content.code.annotate
+    - content.code.copy
+    - content.code.select
+    - toc.follow
+    - header.autohide
+
+  language: en
+  palette:
+    - scheme: default
+      toggle:
+        icon: material/toggle-switch-off-outline
+        name: Switch to dark mode
+      primary: grey
+      accent: purple
+    - scheme: slate
+      toggle:
+        icon: material/toggle-switch
+        name: Switch to light mode
+      primary: grey
+      accent: lime
+
+repo_name: xautomata-kronos
+repo_url: https://github.com/sherlogic/xautomata-kronos.git
+
+plugins:
+  - mkdocstrings
+  - search
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - admonition
+  - pymdownx.arithmatex:
+      generic: true
+  - footnotes
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.mark
+  - attr_list
+
+nav:
+  - index.md
+  - Installation: installation.md
+  - User Guide: user_guide.md
+  - API:
+      - Kronos:
+        - converters: Kronos.converters
+        - costructors: Kronos.costructors
+        - hourglass: Kronos.hourglass
+        - periods: Kronos.periods
+        - sliders: Kronos.sliders
+        - timezones: Kronos.timezones
+        - version: Kronos.version
+
+copyright:
+  MIT
