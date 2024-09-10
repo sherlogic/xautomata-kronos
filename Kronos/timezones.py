@@ -1,4 +1,5 @@
 from datetime import timezone, timedelta, datetime
+import pytz
 
 
 class TimeZones:
@@ -50,6 +51,7 @@ class TimeZones:
                   '-08': tzm08, '-09': tzm09, '-10': tzm10, '-11': tzm11,}
 
     def __init__(self, now: datetime = datetime.now()):
+        self.now = now
         # self.reset()
         self._rome(now)
         self._london(now)
@@ -57,6 +59,64 @@ class TimeZones:
     # def reset(self):
     #     self.rome = timezone(timedelta(hours=1))  # time zone invernale o solare
     #     self.rome_legal = timezone(timedelta(hours=2))  # timezone estiva o legale
+
+    def zone(self, tz:str=None) -> timezone:
+        """
+            Restituisce un oggetto timezone basato sulla stringa fornita o sull'orario UTC di default.
+
+            Questo metodo verifica se la stringa fornita rappresenta una zona valida e la converte in un oggetto timezone.
+            Se la stringa non è valida, viene sollevato un ValueError.
+
+            Args:
+                tz (str, optional): Una stringa che rappresenta la zona oraria desiderata. Può essere uno dei seguenti:
+                    - Chiavi definite in `dict_zones` (es. 'rome', 'it', 'UK')
+                    - Stringhe rappresentanti fusi orari supportati da `pytz` (es. 'Europe/Rome', 'America/New_York')
+                    Se `tz` è None, viene restituito il fuso orario UTC.
+
+            Returns:
+                timezone: Un oggetto timezone che rappresenta la zona oraria specificata.
+
+            Raises:
+                ValueError: Se la stringa fornita non rappresenta una zona oraria valida.
+
+            Esempi:
+                >> tz = TimeZones()
+                >> tz.zone('rome')
+                datetime.timezone(datetime.timedelta(seconds=3600))
+
+                >> tz.zone('Europe/Rome')
+                <DstTzInfo 'Europe/Rome' CET+1:00:00 STD>
+
+                >> tz.zone('Invalid/Timezone')
+                ValueError: Invalid/Timezone is not a valid timezone
+        """
+
+        # if tz is None it use the UTC timezone
+        if tz is None:
+            tz = self.dict_zones['utc']
+
+        # if tz is a string compatible with pytz timezones use that one
+        elif isinstance(tz, str) and tz not in self.dict_zones:
+            if tz in pytz.all_timezones:
+                tz = pytz.timezone(tz)  # finds the timezone
+                tz = tz.localize(self.now).tzinfo  # convert the timezone with the propre GMT based on the actual time
+            else:
+                raise ValueError(f'{tz} is not a valid timezone')
+
+        elif isinstance(tz, pytz.tzinfo.BaseTzInfo):  # se la tz passata è stata generata con pytz, puo essere usata
+            tz = tz.localize(self.now).tzinfo
+
+        # if the string is in the dict_zones use that one
+        elif isinstance(tz, str) and tz in self.dict_zones:
+            tz = self.dict_zones[tz]
+
+        elif isinstance(tz, timezone):
+            pass
+
+        else:
+            raise ValueError(f'{tz} is not a valid timezone')
+
+        return tz
 
     def _rome(self, now):
         weekday_last_day_of_march = datetime(year=now.year, month=3, day=31).weekday()

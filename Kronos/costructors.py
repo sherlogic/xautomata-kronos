@@ -1,7 +1,7 @@
 from typing import List
 from datetime import timedelta, datetime, date, time
 from Kronos.sliders import sliders
-from Kronos.timezones import TimeZones
+from Kronos.timezones import TimeZones, pytz
 import Kronos
 
 
@@ -21,10 +21,9 @@ def datetime_kronos(dt, tz):
             dt = datetime(2000, 10, 10, dt.hour, dt.minute, dt.second, dt.microsecond, tzinfo=dt.tzinfo)
 
     if isinstance(dt, datetime) and dt.tzinfo is None:  # serve per leggere i datetime senza timezone
-        if isinstance(tz, str): tz = TimeZones(dt).dict_zones[tz]
-        # print(f'tz: {tz}')
-        if tz is None:
-            tz = TimeZones(dt).utc  # la zona di default che viene messa in assenza di zona e' utc (00)
+        tz = TimeZones(dt).zone(tz)
+        # if isinstance(tz, str) or isinstance(tz, pytz.tzinfo.BaseTzInfo):
+        # if tz is None: tz = TimeZones(dt).utc  # la zona di default che viene messa in assenza di zona e' utc (00)
         dt = dt.replace(tzinfo=tz)
     return dt
 
@@ -134,7 +133,7 @@ class Costructors(sliders):
             Kronos
         """
         dt = datetime.fromtimestamp(timestamp, tz=TimeZones.utc)
-        if isinstance(tz, str): tz = TimeZones(dt).dict_zones[tz]
+        tz = TimeZones(dt).zone(tz)
         if tz is not None: dt = dt.astimezone(tz=tz)
         return cls(dt)
 

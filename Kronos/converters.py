@@ -102,7 +102,7 @@ class Converters:
         Returns:
             Kronos
         """
-        if isinstance(tz, str): tz = TimeZones(self.dt.replace(tzinfo=None)).dict_zones[tz]
+        tz = TimeZones(self.dt.replace(tzinfo=None)).zone(tz)
         new_kronos = self.__class__()
         new_kronos.dt = self.dt.astimezone(tz=tz)
         return new_kronos
@@ -117,7 +117,7 @@ class Converters:
         Returns:
             Kronos
         """
-        if isinstance(tz, str): tz = TimeZones(self.dt.replace(tzinfo=None)).dict_zones[tz]
+        tz = TimeZones(self.dt.replace(tzinfo=None)).zone(tz)
         new_kronos = self.__class__()
         new_kronos.dt = self.dt.replace(tzinfo=tz)
         return new_kronos
