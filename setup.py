@@ -15,6 +15,7 @@ with open("Kronos/version.py", "r") as f:
 version = version[0].split("'")[1]
 
 # version go
+pytz = 'pytz==2022.7'
 # version end
 
 setup(
@@ -29,5 +30,5 @@ setup(
     author_email='',
     description='',
     url="https://github.com/sherlogic/xautomata-kronos.git",
-install_requires=[],
+install_requires=[pytz],
 )
