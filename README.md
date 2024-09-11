@@ -6,7 +6,7 @@
 Classe per la gestione dei timestamp in modo chiaro e univoco. La classe forza l'uso delle timezone indipendentemente da come
 si crea l'oggetto temporale.
 
-Kronos è basata unicamente sulla libreria standard di python datetime.
+Kronos è basata sulla libreria standard di python **datetime** e su **pytz**.
 
 Un oggetto Kronos è interamente compatibile con un oggetto datetime (che sia datetime.datetime, datetime.date, datetime.time).
 Possono essere fatte operazioni incociate Kronos con datetime o isoformat. In ogni situazione Kronos convertira l'oggetto non Kronos per poi usarlo,
@@ -213,7 +213,8 @@ Al momento sono presenti:
 - 'london' (aka 'uk' o 'UK')
 
 ### Timezone compatibile
-In qualsiasi campo venga richiesta una timezone, puo essere inserito una qualsiasi oggetto time zone compatibile
+In qualsiasi campo venga richiesta una timezone, puo essere inserito una qualsiasi oggetto time zone compatibile.
+Possono essere usate direttamente le stringhe dello IANA time zone database, senza dover caricare la libreria pytz.
 ```python
 import Kronos
 from datetime import date, datetime, timedelta, time, timezone
@@ -221,6 +222,8 @@ from pytz import timezone as tz
 Kronos.now(tz=timezone(timedelta(hours=1)))
 >> 2024-07-24 13:35:26.653931+01:00
 Kronos.now(tz=tz('US/Eastern'))
+>> 2024-07-24 13:35:26.711635-04:56
+Kronos.now(tz='US/Eastern')
 >> 2024-07-24 13:35:26.711635-04:56
 ```
 
