@@ -1,4 +1,9 @@
 from Kronos.hourglass import Core, TimeZones, Format, Converters
+from .version import version
+
+
+def __version__():
+    return version
 
 
 def now(tz=None):
