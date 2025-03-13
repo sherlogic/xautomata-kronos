@@ -100,6 +100,7 @@ class Costructors(sliders):
         """
         # if isinstance(tz, str): tz = TimeZones.dict_zones[tz]
         try:
+            iso = iso.replace('Z', '+00:00') if 'Z' in iso else iso  # necessario perche con python < 3.11 non veniva gestita la Z
             dt = datetime.fromisoformat(iso)
             return cls(dt, tz=tz)
         except:
