@@ -232,3 +232,40 @@ Kronos.now(tz='+01')
 Kronos.now(tz='-06')
 >> 2024-07-24 13:38:12.292010-06:00
 ```
+
+
+# Note utili
+
+Offsets in Resample
+```
+Alias   Description
+
+B       business day frequency
+C       custom business day frequency
+D       calendar day frequency
+W       weekly frequency
+ME      month end frequency
+SME     semi-month end frequency (15th and end of month)
+BME     business month end frequency
+CBME    custom business month end frequency
+MS      month start frequency
+SMS     semi-month start frequency (1st and 15th)
+BMS     business month start frequency
+CBMS    custom business month start frequency
+QE      quarter end frequency
+BQE     business quarter end frequency
+QS      quarter start frequency
+BQS     business quarter start frequency
+YE      year end frequency
+BYE     business year end frequency
+YS      year start frequency
+BYS     business year start frequency
+h       hourly frequency
+bh      business hour frequency
+cbh     custom business hour frequency
+min     minutely frequency
+s       secondly frequency
+ms      milliseconds
+us      microseconds
+ns      nanoseconds
+```
