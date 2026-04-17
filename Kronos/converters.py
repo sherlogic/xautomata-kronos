@@ -92,6 +92,15 @@ class Converters:
         # t.tzinfo = self.dt.tzinfo
         return time(hour=self.dt.hour, minute=self.dt.minute, second=self.dt.second, microsecond=self.dt.microsecond, tzinfo=self.dt.tzinfo)
 
+    def tz(self) -> TimeZones:
+        """
+        return the TimeZones from kronos
+
+        Returns:
+            TimeZones
+        """
+        return self.dt.tzinfo
+
     def move_tz(self, tz:TimeZones) -> Kronos:
         """
         modify the time accordingly to a new timezone
